@@ -1,0 +1,119 @@
+drop table if exists Students;
+create table Students(
+    StudentID integer not null PRIMARY KEY,
+    Name text,
+    City text,
+    FOREIGN KEY (City) references Citys(City) on delete restrict on update cascade
+);
+
+drop table if exists Teacher;
+create table Teacher(
+    TeacherID integer not null PRIMARY KEY,
+    Name text,
+    City text,
+    FOREIGN KEY (City) references Citys(City) on delete restrict on update cascade
+);
+
+drop table if exists Courses;
+create table Courses(
+    CourseID integer not null PRIMARY KEY,
+    Name text,
+    Semester text,
+    TeacherID integer,
+    FOREIGN KEY (TeacherID) references Teacher(TeacherID)
+);
+
+drop table if exists StudentsCourses;
+create table StudentsCourses(
+    StudentID integer,
+    CourseID integer,
+    Grade integer,
+    FOREIGN KEY (StudentID) references Students(StudentID) on delete restrict on update cascade,
+    FOREIGN KEY (CourseID) references Courses(CourseID) on delete restrict on update cascade,
+    PRIMARY KEY (StudentID, CourseID)
+);
+
+drop table if exists Citys;
+create table Citys(
+    City text,
+    PostNr integer,
+    CountryID text,
+    FOREIGN KEY (CountryID) references Country(CountryID) on delete restrict on update cascade,
+    PRIMARY KEY (City)
+);
+
+drop table if exists Country;
+create table Country(
+    CountryID text not null PRIMARY KEY,
+    Country text
+);
+
+insert into Country (CountryID, Country) values ('DK', 'Denmark'),
+                                                ('SE', 'Sweden');
+
+insert into Citys (City, PostNr, CountryID) values ('Nykøbing F', 4800, 'DK'),
+                                                   ('Karlskrona', null, 'SE'),
+                                                   ('Billund', 7190, 'DK'),
+                                                   ('Sorø', 4180, 'DK'),
+                                                   ('Eskildstrup', 4863, 'DK'),
+                                                   ('Odense', 5000, 'DK'),
+                                                   ('Stockholm', null, 'SE'),
+                                                   ('Tølløse', 4340, 'DK'),
+                                                   ('Jyllinge', 4340, 'DK'),
+                                                   ('Roskilde', 4000, 'DK');
+
+
+insert into Students (StudentID, Name, City) values (0, 'Aisha Lincoln', 'Nykøbing F'),
+                                                       (1, 'Anya Nielsen', 'Nykøbing F'),
+                                                       (2, 'Alfred Jensen', 'Karlskrona'),
+                                                       (3, 'Berta Bertelsen', 'Billund'),
+                                                       (4, 'Albert Antonsen', 'Sorø'),
+                                                       (5, 'Eske Eriksen', 'Eskildstrup'),
+                                                       (6, 'Olaf Olesen', 'Odense'),
+                                                       (7, 'Salma Simonsen','Stockholm'),
+                                                       (8, 'Theis Thomasen', 'Tølløse'),
+                                                       (9, 'Janet Jensen', 'Jyllinge'),
+                                                       (10, 'Egon Damdrup', 'Roskilde');
+
+
+insert into Teacher (TeacherID, Name, City) values (0, 'Line Reinhardt', 'Nykøbing F'),
+                                                    (1, 'Bo Holst', 'Roskilde');
+
+insert into Courses (CourseID, Name, Semester, TeacherID) values (0, 'SD', '2020 autumn', 0),
+                                            (1, 'ES1', '2020 autumn', 1),
+                                            (2, 'SD', '2021 autumn', 0);
+
+insert into StudentsCourses (StudentID, CourseID, Grade) values (0,0,12),
+                                                                (0,1,10),
+                                                                (1,2,null),
+                                                                (1,1,12),
+                                                                (2,0,7),
+                                                                (2,1,10),
+                                                                (3,2,null),
+                                                                (3,1,2),
+                                                                (4,0,10),
+                                                                (4,1,7),
+                                                                (5,1,10),
+                                                                (5,2,null),
+                                                                (6,0,4),
+                                                                (6,1,12),
+                                                                (7,2,null),
+                                                                (7,1,12),
+                                                                (8,0,12),
+                                                                (8,1,12),
+                                                                (9,2,null),
+                                                                (9,1,7),
+                                                                (10,2,null),
+                                                                (10,1,2);
+
+select AVG(Grade) from StudentsCourses where StudentID = '0';
+
+select AVG(Grade) from StudentsCourses where CourseID = '0';
+
+SELECT D1.StudentID as StudentID, D1.Name as Name,
+    D2.CourseID as CourseID, D3.Name as CourseName, D2.Grade as Grade
+    FROM Students as D1
+    JOIN StudentsCourses as D2 ON D1.StudentID=D2.StudentID
+    JOIN Courses D3 on D3.CourseID = D2.CourseID
+    WHERE D1.StudentID= 1;
+
