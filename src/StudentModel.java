@@ -36,7 +36,12 @@ public class StudentModel {
     }
 
     public void PstmtGetCoursesAndGradesFromStudentID(String StudentID) throws SQLException {
-        String sql="SELECT AVG(Grade) as Grade FROM StudentsCourses WHERE StudentID = ?";
+        String sql="SELECT D1.StudentID as StudentID, D1.Name as Name,\n" +
+                "       D2.CourseID as CourseID, D3.Name as CourseName, D2.Grade as Grade\n" +
+                "FROM Students as D1\n" +
+                "         JOIN StudentsCourses as D2 ON D1.StudentID=D2.StudentID\n" +
+                "         JOIN Courses D3 on D3.CourseID = D2.CourseID\n" +
+                "WHERE D1.StudentID= ?;";
         pstmt=conn.prepareStatement(sql);
         pstmt.setString(1, StudentID);
         rs=pstmt.executeQuery();
