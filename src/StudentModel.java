@@ -21,4 +21,14 @@ public class StudentModel {
     public void CreateStatement() throws SQLException{
         this.stmt=conn.createStatement();
     }
+    public void PstmtAVGgradefromStudentID(String StudentID) throws SQLException {
+        String sql="SELECT AVG(Grade) as Grade FROM StudentsCourses WHERE StudentID = ?";
+        pstmt=conn.prepareStatement(sql);
+        pstmt.setString(1, StudentID);
+        rs=pstmt.executeQuery();
+        while(rs!=null && rs.next()){
+            String AVGGrade = rs.getString("Grade");
+            System.out.println(AVGGrade);
+        }
+    }
 }

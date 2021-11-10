@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -19,6 +20,19 @@ import java.sql.SQLException;
             primaryStage.setTitle("Student Admin");
             primaryStage.setScene(new Scene(view.asParent(), 600, 475));
             primaryStage.show();
+            try {
+                model.PstmtAVGgradefromStudentID("0");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            primaryStage.setOnCloseRequest(e -> {
+                Platform.exit();
+                try {
+                    model.closeStudentDataConnection();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            });
         }
         public static void main(String[] args){
             launch(args);

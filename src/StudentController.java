@@ -9,7 +9,22 @@ public class StudentController {
     public StudentController (StudentModel m, UIJavaFX v) throws SQLException {
         this.view = v;
         this.model = m;
-        this.view.exitBtn.setOnAction(e -> Platform.exit());
+
+        this.view.exitBtn.setOnAction(e -> {
+            Platform.exit();
+            try {
+                this.model.closeStudentDataConnection();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+        this.model.connectToStudentData();
+        this.model.CreateStatement();
         this.view.configure();
+    }
+
+
+    public void HandleGetStudentsGrades(){
+
     }
 }
