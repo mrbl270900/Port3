@@ -8,7 +8,7 @@ import java.sql.SQLException;
     public class Main extends Application {
         public void start(Stage primaryStage) {
             UIJavaFX view=new UIJavaFX();
-            StudentModel model = new StudentModel("jdbc:sqlite:C:/Users/madsr/IdeaProjects/Port3/src/StudentDatabase");
+            StudentModel model = new StudentModel("jdbc:sqlite:C:/Users/mads/IdeaProjects/Port3/src/StudentDatabase");
             StudentController controller = null;
 
             try {
@@ -20,11 +20,6 @@ import java.sql.SQLException;
             primaryStage.setTitle("Student Admin");
             primaryStage.setScene(new Scene(view.asParent(), 600, 475));
             primaryStage.show();
-            try {
-                model.PstmtAVGgradefromStudentID("0");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
             primaryStage.setOnCloseRequest(e -> {
                 Platform.exit();
                 try {
