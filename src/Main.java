@@ -7,7 +7,7 @@ import java.sql.SQLException;
     public class Main extends Application {
         public void start(Stage primaryStage) {
             UIJavaFX view=new UIJavaFX();
-            StudentModel model = new StudentModel("jdbc:sqlite:identifier.sqlite");
+            StudentModel model = new StudentModel("jdbc:sqlite:C:/Users/madsr/IdeaProjects/Port3/src/StudentDatabase");
             StudentController controller = null;
 
             try {

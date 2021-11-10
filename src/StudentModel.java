@@ -11,17 +11,14 @@ public class StudentModel {
         this.url=url;
     }
 
-    public void connectToTrainData() throws SQLException {
+    public void connectToStudentData() throws SQLException {
         conn= DriverManager.getConnection(url);
     }
-    public void closeTrainDataConnection() throws  SQLException{
+    public void closeStudentDataConnection() throws  SQLException{
         if(conn!= null)
             conn.close();
     }
     public void CreateStatement() throws SQLException{
         this.stmt=conn.createStatement();
     }
-
-
-
 }
