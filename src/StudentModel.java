@@ -112,14 +112,30 @@ public class StudentModel {
             System.out.println(CId);
         }
 
-        String SQL3 = "Update StudentsCourses Set Grade = ? Where StudentID = ? and CourseID = ?;";
+        String SQL3 = "SELECT Grade as Grade from StudentsCourses where CourseID = ? and StudentID = ?;";
         pstmt=conn.prepareStatement(SQL3);
-        pstmt.setString(1, Grade);
+        pstmt.setString(1,CId);
         pstmt.setString(2, SId);
-        pstmt.setString(3, CId);
-        pstmt.executeUpdate();
-        conn.commit();
-        System.out.println(Grade);
+        rs=pstmt.executeQuery();
+        String GradeIsNull = "2";
+        while (rs!=null && rs.next()){
+            GradeIsNull = rs.getString(1);
+            System.out.println(GradeIsNull);
+        }
+
+        if(GradeIsNull == null) {
+            String SQL4 = "Update StudentsCourses Set Grade = ? Where StudentID = ? and CourseID = ?;";
+            pstmt = conn.prepareStatement(SQL4);
+            pstmt.setString(1, Grade);
+            pstmt.setString(2, SId);
+            pstmt.setString(3, CId);
+            pstmt.executeUpdate();
+            conn.commit();
+            System.out.println(Grade);
+        }else{
+            System.out.println("Student has a grade");
+
+        }
     }
 }
 
