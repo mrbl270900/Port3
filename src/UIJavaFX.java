@@ -13,10 +13,13 @@ public class UIJavaFX {
     Button GetGradesStudent;
     Button GetGradesCourse;
     Button GetStudentsInfo;
+    Button SetGrade;
     ComboBox StudentComB;
     ComboBox CourseComB;
+    ComboBox GradeSelComB;
     ObservableList<String> Students;
     ObservableList<String> Courses;
+    ObservableList<String> Grades;
     TextArea StudentGrade;
 
     public UIJavaFX(){
@@ -34,16 +37,20 @@ public class UIJavaFX {
         GetGradesCourse = new Button("Get Grades From Course");
         GetGradesStudent = new Button("Get Grades From Student");
         GetStudentsInfo = new Button("Get Students Info");
+        SetGrade = new Button("Set Grade");
         StudentComB = new ComboBox();
         CourseComB = new ComboBox();
+        GradeSelComB = new ComboBox();
         StudentGrade = new TextArea();
         startview.add(exitBtn,20,20);
         startview.add(StudentComB,1,1);
         startview.add(CourseComB,2,1);
+        startview.add(GradeSelComB, 3,1);
         startview.add(GetGradesCourse,2,2);
         startview.add(GetGradesStudent,1,2);
         startview.add(GetStudentsInfo,1,3);
-        startview.add(StudentGrade,1,4,2,4);
+        startview.add(SetGrade,3,2);
+        startview.add(StudentGrade,1,4,3,4);
 
     }
 
@@ -52,6 +59,8 @@ public class UIJavaFX {
         StudentComB.getSelectionModel().selectFirst();
         CourseComB.setItems(Courses);
         CourseComB.getSelectionModel().selectFirst();
+        GradeSelComB.setItems(Grades);
+        GradeSelComB.getSelectionModel().selectFirst();
 
     }
 }

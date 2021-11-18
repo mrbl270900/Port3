@@ -5,6 +5,7 @@ import javafx.scene.control.TextArea;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class StudentController {
     UIJavaFX view;
@@ -26,12 +27,31 @@ public class StudentController {
         this.model.CreateStatement();
         this.view.Courses = GetCourses();
         this.view.Students = GetStudents();
+        this.view.Grades = GetGrades();
         view.GetStudentsInfo.setOnAction(e->{
             try {
                 HandleGetStudentsInfo(String.valueOf(view.StudentComB.getValue()), view.StudentGrade);
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 System.out.println(ex.getMessage());
+            }
+        });
+
+        view.SetGrade.setOnAction(e->{
+            try {
+                model.SetGrade(String.valueOf(view.StudentComB.getValue()), String.valueOf(view.CourseComB.getValue()), String.valueOf(view.GradeSelComB.getValue()));
+            }catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println(ex.getMessage());
+                if (model.conn != null) {
+                    try {
+                        System.err.print("Grade is being rolled back");
+                        model.conn.rollback();
+                    } catch (SQLException excep) {
+                        excep.printStackTrace();
+                        System.out.println(excep.getMessage());
+                    }
+                }
             }
         });
 
@@ -64,13 +84,20 @@ public class StudentController {
         return CoursesNames;
     }
 
+    public ObservableList<String> GetGrades() {
+        ArrayList<String> Grades = new ArrayList<>();
+        Collections.addAll(Grades, "-3", "0", "02", "4", "7", "10", "12");
+        ObservableList<String> GradesNR = FXCollections.observableArrayList(Grades);
+        return GradesNR;
+    }
+
     public void HandleGetStudentsInfo(String Student, TextArea studentGrade) throws SQLException{
         studentGrade.clear();
         studentGrade.appendText("Student Info: ");
         ArrayList<StudentInfo> Info= model.PstmtGetCoursesAndGradesFromStudentName(Student);
         for (int i = 0; i < Info.size(); i++) {
             String Course = String.format(Info.get(i).CourseName);
-            Integer Grade = Info.get(i).Grade;
+            String Grade = Info.get(i).Grade;
             studentGrade.appendText(Student + " on course " + Course + " has gotten " + Grade + " as their grade\n");
         }
     }

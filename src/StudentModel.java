@@ -61,8 +61,8 @@ public class StudentModel {
             String Name = rs.getString("Name");
             Integer CourseID = rs.getInt("CourseID");
             String CourseName = rs.getString("CourseName");
-            Integer Grade = rs.getInt("Grade");
-            System.out.println("Studen with: ID " + StudentID + " named " + Name + " have attendet " + CourseName + " with courseID " + CourseID + " and have gotten the grade " + Grade);
+            String Grade = rs.getString("Grade");
+            System.out.println("Student with: ID " + StudentID + " named " + Name + " have attendet " + CourseName + " with courseID " + CourseID + " and have gotten the grade " + Grade);
             StudentInfo I = new StudentInfo(StudentID, Name, CourseID, CourseName, Grade);
             StudentsInfos.add(I);
         }
@@ -90,6 +90,37 @@ public class StudentModel {
         }
         return Courses;
     }
+    public void SetGrade(String Student, String Course, String Grade) throws SQLException{
+        conn.setAutoCommit(false);
+        String SQL1 = "SELECT StudentID as StudentID, Name as Name from Students WHERE Name = ?;";
+        pstmt=conn.prepareStatement(SQL1);
+        pstmt.setString(1,Student);
+        rs=pstmt.executeQuery();
+        String SId = null;
+        while (rs!=null && rs.next()){
+            SId = rs.getString(1);
+            System.out.println(SId);
+        }
+
+        String SQL2 = "SELECT CourseID as CourseID, Name as CourseName from Courses where Name = ?;";
+        pstmt=conn.prepareStatement(SQL2);
+        pstmt.setString(1,Course);
+        rs=pstmt.executeQuery();
+        String CId = null;
+        while (rs!=null && rs.next()){
+            CId = rs.getString(1);
+            System.out.println(CId);
+        }
+
+        String SQL3 = "Update StudentsCourses Set Grade = ? Where StudentID = ? and CourseID = ?;";
+        pstmt=conn.prepareStatement(SQL3);
+        pstmt.setString(1, Grade);
+        pstmt.setString(2, SId);
+        pstmt.setString(3, CId);
+        pstmt.executeUpdate();
+        conn.commit();
+        System.out.println(Grade);
+    }
 }
 
 class StudentInfo{
@@ -97,8 +128,8 @@ class StudentInfo{
     String Name;
     Integer CourseID;
     String CourseName;
-    Integer Grade;
-    StudentInfo(Integer StudentID, String Name, Integer CourseID, String CourseName, Integer Grade){
+    String Grade;
+    StudentInfo(Integer StudentID, String Name, Integer CourseID, String CourseName, String Grade){
         this.StudentID = StudentID;
         this.Name = Name;
         this.CourseID = CourseID;
